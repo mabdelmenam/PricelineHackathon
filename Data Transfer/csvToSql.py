@@ -10,7 +10,7 @@ def insert(cursor):
             cursor.execute(query,data)
 
 try:
-    mydb = mysql.connector.connect(host='localhost', user='root',password='popipopI1@', database='crime')
+    mydb = mysql.connector.connect(host='localhost', user='root',password='password', database='crime')
     cursor = mydb.cursor()
      
     insert(cursor)

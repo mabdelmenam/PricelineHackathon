@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <title>Crimetime</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 80%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Crime Time</h1>
+    <h2>Jeremy</h2>
+    <div id="map"></div>
+    <script>
+       function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lng: -74.0060, lat: 40.7128},
+          zoom: 8
+        });
+        var infoWindow = new google.maps.InfoWindow;
+
+          // Change this depending on the name of your PHP or XML file
+          downloadUrl('http://localhost/priceline/displayTest.php', function(data) {
+            var xml = data.responseXML;
+            var markers = xml.documentElement.getElementsByTagName('marker');
+            Array.prototype.forEach.call(markers, function(markerElem) {
+              var num = markerElem.getAttribute('num');
+              //var other = markerElem.getAttribute('other');
+               //var id = markerElem.getAttribute('id');
+              //console.log(num);
+              //console.log(other);
+              var point = new google.maps.LatLng(
+                  parseFloat(markerElem.getAttribute('lat')),
+                  parseFloat(markerElem.getAttribute('lng')));
+              console.log(point);
+
+              var infowincontent = document.createElement('div');
+              var strong = document.createElement('strong');
+              strong.textContent = name
+              infowincontent.appendChild(strong);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var text = document.createElement('text');
+              text.textContent = "test"
+              infowincontent.appendChild(text);
+              var marker = new google.maps.Marker({
+                map: map,
+                position: point,
+                icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+              });
+              marker.addListener('click', function() {
+                infoWindow.setContent(infowincontent);
+                infoWindow.open(map, marker);
+              });
+            });
+          });
+        }
+
+
+
+      function downloadUrl(url, callback) {
+        var request = window.ActiveXObject ?
+            new ActiveXObject('Microsoft.XMLHTTP') :
+            new XMLHttpRequest;
+
+        request.onreadystatechange = function() {
+          if (request.readyState == 4) {
+            request.onreadystatechange = doNothing;
+            callback(request, request.status);
+          }
+        };
+
+        request.open('GET', url, true);
+        request.send(null);
+      }
+
+      function doNothing() {}
+  </script>
+
+
+    <!--API KEY SCRIPT-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=
+AIzaSyDLF0nZ9geMKndvaYy-d9b8JXkwR4PS93Q
+&callback=initMap"
+    async defer></script>
+
+
+
+  </body>
+</html>
